@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript">
+
+    const ABI = [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "subtractedValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "decreaseAllowance",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "addedValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "increaseAllowance",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
+    const CONTRACTADDRESS = "0x0e84afd8a4e21118ca5af303b2781c46097c1fce"
+    const web3 = new Web3("https://rinkeby.infura.io/v3/9140d3a02be94bab81b784a25e39564c")
+    const MyContract = new web3.eth.Contract(ABI, CONTRACTADDRESS)
+    const tokenOwner = '0xb36509aa926614b79214a68608eDe342aEB8dAC9'
+    const initWeb3 = async () => {
+        if (window.ethereum) {
+            var web3 = new Web3(window.ethereum)
+            try {
+                await window.ethereum.enable()
+            }catch (error) {
+                console.log(error)
+            }
+        }else if (window.web3) {
+            var web3 = new Web3(web3.currentProvider)
+            web3.eth.sendTransaction({})
+        }else{
+            console.log('errrrrrrr')
+        }
+    }
+    if (typeof window.ethereum !== 'undefined') {
+        console.log('MetaMask is installed!');
+    }else{
+        console.log('메타마스크 설치안됨')
+    }
+
+
+    MyContract.methods.totalSupply().call().then(function(result) {
+        $("#info").append("totalSupply : "+ result/1000000000000000000 + "<br>")
+      })
+    MyContract.methods.balanceOf(tokenOwner).call().then(function(result) {
+        $("#info").append("owner : "+ result/1000000000000000000 + "<br>")
+      })
+    async function sendToken(){
+        var addressTo = $("#addressTo").val()
+        var tokens = $("#tokens").val()
+        
+        MyContract.methods.transfer(addressTo, tokens).send({from:tokenOwner}).then(function(result) {
+            if(result){
+                $("#output").append("전송성공")
+            }else{
+                $("#output").append("전송실패")
+            }
+        })
+
+    //     web3.eth.personal.unlockAccount(tokenOwner, 'edenloop!').then(function(result,e){
+    //         console.log("Account "+from+" unlocked successfully");
+    //         MyContract.methods.transfer(addressTo ,tokens).send({from:tokenOwner})
+    //             .on('transactionHash',function(txHash){
+    //                 console.log("Transaction hash : "+txHash);
+    //                 fullfill(txHash);
+    //             }).catch(function(error){
+    //                 console.log("Unable to send transaction. Error:"+error);
+                    
+                   
+    //             });        
+    //    }).catch(function(error){
+    //         console.log("Incorrect transaction password for account: "+tokenOwner);
+            
+    //    });
+
+    // const PUBLIC_KEY = '0xb36509aa926614b79214a68608eDe342aEB8dAC9'
+    //   const PRIVATE_KEY = 'c7ea506713558e7b3f13d227207636c5bfbe6f444a3812fdd1e737cfcf973c62'
+
+    //   const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, "latest") //get latest nonce
+
+    //   //the transaction
+    //   const tx = {
+    //     from: PUBLIC_KEY,
+    //     to: addressTo,
+    //     nonce: nonce,
+    //     gas: 500000,
+    //     data: MyContract.methods.transfer(addressTo, tokens).encodeABI()
+    //   }
+
+    //   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY)
+    //   signPromise
+    //     .then((signedTx) => {
+    //       web3.eth.sendSignedTransaction(
+    //         signedTx.rawTransaction,
+    //         function (err, hash) {
+    //           if (!err) {
+    //             console.log(
+    //               "The hash of your transaction is: ",
+    //               hash,
+    //               "\nCheck Alchemy's Mempool to view the status of your transaction!"
+    //             )
+    //           } else {
+    //             console.log(
+    //               "Something went wrong when submitting your transaction:",
+    //               err
+    //             )
+    //           }
+    //         }
+    //       )
+    //     })
+    //     .catch((err) => {
+    //       console.log("Promise failed:", err)
+    //     })
+
+    }
+    </script>
+
+    <h1>MLT</h1>
+    <div id="info"></div>
+    <br>
+    <input id="addressTo" placeholder="전송할 주소" value="0x2987DA2d6cF676a75fDaD41a4CAbc2b29b998F48"><br>
+    <input id="tokens" placeholder="전송할 토큰 개수" value="50"><br>
+    <button type="button" onClick="sendToken()">전송</button>
+    <br />
+    <br />
+    <div id="output"></div>
+
